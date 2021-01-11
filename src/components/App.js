@@ -1,6 +1,9 @@
 import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
+import Register from './Register';
+import Login from './Login';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import {rejectPromise} from '../utils/utils';
@@ -10,6 +13,8 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletionPopup from './ConfirmDeletionPopup';
+import ProtectedRoute from './ProtectedRoute';
+
 
 function App() {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false);
@@ -20,6 +25,7 @@ function App() {
   const [ currentUser, setCurrentUser ] = React.useState('');
   const [ cards, setCards ] = React.useState([]);
   const [ isLoading, setIsLoading ] = React.useState(false);
+  const [ loggedIn, setLoggedIn ] = React.useState(false);
 
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
@@ -151,44 +157,63 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
-      <Main
-        onEditAvatar={handleEditAvatarClick}
-        onEditProfile={handleEditProfileClick}
-        onAddCard={handleAddCardClick}
-        onCardClick={handleCardClick}
-        cards={cards}
-        onCardLike={handleCardLike}
-        onConfirmDeletionPopupOpen={confirmDeletionPopupOpen}
-      />
+      <main className="main-content">
+        <ProtectedRoute
+          exact path="/"
+          loggedIn={loggedIn}
+          component={Main}
+          onEditAvatar={handleEditAvatarClick}
+          onEditProfile={handleEditProfileClick}
+          onAddCard={handleAddCardClick}
+          cards={cards}
+          onConfirmDeletionPopupOpen={confirmDeletionPopupOpen}
+          onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+        />
+        <Route path='/sign-up'>
+          <Register />
+        </Route>
+        <Route path='/sign-in'>
+          <Login />
+        </Route>
+        <Route path="/">
+          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-up" />}
+        </Route>
+      </main>
       <Footer />
-      <EditProfilePopup
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-        onUpdateUser={handleUpdateUser}
-        isLoading={isLoading}
-      />
-      <EditAvatarPopup
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-        onUpdateAvatar={handleUpdateAvatar}
-        isLoading={isLoading}
-      />
-      <AddPlacePopup
-        isOpen={isAddCardPopupOpen}
-        onClose={closeAllPopups}
-        onAddPlace={handleAddPlaceSubmit}
-        isLoading={isLoading}
-      />
-      <ConfirmDeletionPopup
-        isOpen={isConfirmDeletionPopup}
-        onClose={closeAllPopups}
-        cardDelete={handleCardDelete}
-        isLoading={isLoading}
-      />
-      <ImagePopup
-        card={selectedCard}
-        onClose={closeAllPopups}
-      />
+      {
+        loggedIn &&
+        <>
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+            isLoading={isLoading}
+          />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+            isLoading={isLoading}
+          />
+          <AddPlacePopup
+            isOpen={isAddCardPopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+            isLoading={isLoading}
+          />
+          <ConfirmDeletionPopup
+            isOpen={isConfirmDeletionPopup}
+            onClose={closeAllPopups}
+            cardDelete={handleCardDelete}
+            isLoading={isLoading}
+          />
+          <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}
+          />
+        </>
+      }
     </CurrentUserContext.Provider>
   );
 }
