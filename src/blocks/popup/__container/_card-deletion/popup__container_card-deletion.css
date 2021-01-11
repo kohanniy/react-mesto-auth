@@ -1,0 +1,15 @@
+.popup__container_card-deletion {
+  width: 100%;
+  max-width: 430px;
+  background: #ffffff;
+  padding: 34px 36px 36px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 492px) {
+  .popup__container_card-deletion {
+    width: 75%;
+    padding: 31px 20px 30px;
+  }
+}

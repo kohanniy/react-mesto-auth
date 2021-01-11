@@ -1,0 +1,27 @@
+.cards__list {
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 18px 1fr 18px 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    -ms-grid-rows: auto 21px auto;
+    grid-template-rows: repeat(2, auto);
+    gap: 21px 18px;
+}
+
+@media (max-width: 964px) {
+  .cards__list {
+    -ms-grid-columns: 1fr 18px 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards__list {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+}
