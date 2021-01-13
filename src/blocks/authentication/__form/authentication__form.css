@@ -1,0 +1,11 @@
+.authentication__form {
+  max-width: 430px;
+  width: 100%;
+  position: relative;
+}
+
+/* @media (max-width: 492px) {
+  .authentication__form {
+    width: 75%;
+  }
+} */

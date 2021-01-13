@@ -27,6 +27,11 @@ function App() {
   const [ isLoading, setIsLoading ] = React.useState(false);
   const [ loggedIn, setLoggedIn ] = React.useState(false);
 
+  function handleHeaderButtonClick() {
+    setLoggedIn(!loggedIn);
+  }
+
+
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
   }
@@ -156,7 +161,10 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header
+        headerButtonClick={handleHeaderButtonClick}
+        loggedIn={loggedIn}
+      />
       <main className="main-content">
         <ProtectedRoute
           exact path="/"
@@ -170,14 +178,14 @@ function App() {
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
         />
-        <Route path='/sign-up'>
+        <Route path='/signup'>
           <Register />
         </Route>
-        <Route path='/sign-in'>
+        <Route path='/signin'>
           <Login />
         </Route>
         <Route path="/">
-          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-up" />}
+          {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
         </Route>
       </main>
       <Footer />

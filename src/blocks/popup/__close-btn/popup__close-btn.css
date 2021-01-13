@@ -7,7 +7,6 @@
   position: absolute;
   top: -46px;
   right: -46px;
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 

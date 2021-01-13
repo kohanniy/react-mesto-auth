@@ -10,7 +10,6 @@
   position: absolute;
   top: 18px;
   right: 15px;
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 

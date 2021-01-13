@@ -13,6 +13,8 @@ export function useFormAndValidation() {
     setIsValid(e.target.closest('form').checkValidity());
   };
 
+
+
   const resetForm = React.useCallback((newValues = {}, newErrors = {}, newIsValid = false) => {
     setValues(newValues);
     setErrors(newErrors);

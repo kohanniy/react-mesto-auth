@@ -2,12 +2,10 @@
   width: 150px;
   height: 50px;
   border: 2px solid #ffffff;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   border-radius: 2px;
   background: transparent;
   outline: none;
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
   position: relative;
 }
@@ -29,8 +27,7 @@
 }
 
 .profile__add-btn::after {
-  -webkit-transform: rotate(90deg);
-          transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 @media (max-width: 964px) {

@@ -1,15 +1,50 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Form from './Form';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import Input from './Input';
+// import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Register(props) {
+function Register({isLoading}) {
+  const { values, handleChange, errors, isValid } = useFormAndValidation();
+
   return (
-    <>
-      <div>Зарегистрироваться</div>
-      <p>
+    <section className="authentication">
+      <Form
+        name="register"
+        title="Регистрация"
+        buttonText={isLoading ? 'Сохранение...' : 'Зарегистрироваться'}
+        isDisabled={!isValid}
+        formClasses={'authentication__form form_auth'}
+        isAuth={true}
+      >
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email"
+          handleChange={handleChange}
+          values={values}
+          autoComplete="email"
+          errors={errors}
+          isAuth={true}
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Пароль"
+          handleChange={handleChange}
+          values={values}
+          errors={errors}
+          isAuth={true}
+          minLength="6" maxLength="200"
+          autoComplete = "new-password"
+        />
+      </Form>
+      <p className="authentication__text">
         Уже зарегистрированы?&nbsp;
-        <Link to="sign-in">Войти</Link>
+        <Link className="authentication__link" to="signin">Войти</Link>
       </p>
-    </>
+    </section>
   );
 }
 

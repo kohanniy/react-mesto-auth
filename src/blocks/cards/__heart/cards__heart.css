@@ -4,7 +4,6 @@
   background: transparent url(../../../images/cards-like-icon.svg) center no-repeat;
   border: 0;
   outline: 0;
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 

@@ -1,4 +1,5 @@
 import { handleStopPropagation } from '../utils/utils';
+import ClosePopupButton from './ClosePopupButton';
 
 function ImagePopup({ card, onClose}) {
   return (
@@ -11,12 +12,7 @@ function ImagePopup({ card, onClose}) {
           <img alt={card.name} src={card.link} className="popup__pic" />
           <figcaption className="popup__pic-caption">{card.name}</figcaption>
         </figure>
-        <button
-          onClick={onClose}
-          type="button"
-          aria-label="Закрыть"
-          className="popup__close-btn"
-        />
+        <ClosePopupButton onClose={onClose} />
       </div>
     </div>
   );
