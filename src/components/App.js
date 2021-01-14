@@ -34,10 +34,25 @@ function App() {
   }
 
   function handleRegisterFormSubmit(password, email) {
-    setIsLoading(!isLoading)
+    setIsLoading(!isLoading);
     auth.register(password, email)
       .then((res) => {
         history.push('/signin');
+      })
+      .catch((err) => {
+        rejectPromise(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  function handleLoginFormSubmit(password, email) {
+    setIsLoading(!isLoading);
+    auth.authorize(password, email)
+      .then((data) => {
+        setLoggedIn(!loggedIn);
+        history.push('/');
       })
       .catch((err) => {
         rejectPromise(err);
@@ -200,7 +215,9 @@ function App() {
           />
         </Route>
         <Route path='/signin'>
-          <Login />
+          <Login
+            onLoginFormSubmit={handleLoginFormSubmit}
+          />
         </Route>
         <Route path="/">
           {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}

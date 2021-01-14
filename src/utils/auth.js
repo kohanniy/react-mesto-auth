@@ -4,6 +4,7 @@ export const register = (password, email) => {
   return fetch (`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
+      'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({password, email})
@@ -17,17 +18,23 @@ export const register = (password, email) => {
     })
 };
 
-export const authorize = (data) => {
+export const authorize = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify({ password, email })
   })
-  .then((response) => response.json())
+  .then((res) => res.json())
   .then((data) => {
-    localStorage.setItem('token', data.token);
+    if (data.jwt) {
+      localStorage.setItem('jwt', data.jwt);
+      return data;
+    } else {
+      return;
+    }
+
   })
 }
