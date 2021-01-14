@@ -27,16 +27,13 @@ function App() {
   const [ cards, setCards ] = React.useState([]);
   const [ isLoading, setIsLoading ] = React.useState(false);
   const [ loggedIn, setLoggedIn ] = React.useState(false);
+  const [ userEmail, setUserEmail ] = React.useState('');
   const history = useHistory();
-
-  function handleHeaderButtonClick() {
-    setLoggedIn(!loggedIn);
-  }
 
   function handleRegisterFormSubmit(password, email) {
     setIsLoading(!isLoading);
     auth.register(password, email)
-      .then((res) => {
+      .then((data) => {
         history.push('/signin');
       })
       .catch((err) => {
@@ -51,7 +48,8 @@ function App() {
     setIsLoading(!isLoading);
     auth.authorize(password, email)
       .then((data) => {
-        setLoggedIn(!loggedIn);
+        setLoggedIn(true);
+        setUserEmail(email);
         history.push('/');
       })
       .catch((err) => {
@@ -60,6 +58,12 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       })
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem('token');
+    history.push('/signin');
+    setLoggedIn(false);
   }
 
   function handleCardClick(cardData) {
@@ -177,9 +181,28 @@ function App() {
     return () => document.removeEventListener('keydown', handlePopupsEscClose);
   }, []);
 
+  //Проверка токена
+  React.useEffect(() => {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      auth.getContent(token)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setUserEmail(res.data.email);
+            history.push('/');
+          }
+        })
+        .catch((err) => {
+          rejectPromise(err);
+        })
+      }
+  }, [history]);
+
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {
-    api.getDataForRendered()
+    if (loggedIn) {
+      api.getDataForRendered()
       .then((data) => {
         const [ cardsData, userData ] = data;
         setCards(cardsData);
@@ -188,13 +211,15 @@ function App() {
       .catch((err) => {
         rejectPromise(err);
       })
-  }, []);
+    }
+  }, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
-        headerButtonClick={handleHeaderButtonClick}
+        signOut={handleSignOut}
         loggedIn={loggedIn}
+        userEmail={userEmail}
       />
       <main className="main-content">
         <ProtectedRoute

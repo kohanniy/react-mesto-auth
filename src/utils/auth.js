@@ -29,12 +29,24 @@ export const authorize = (password, email) => {
   })
   .then((res) => res.json())
   .then((data) => {
-    if (data.jwt) {
-      localStorage.setItem('jwt', data.jwt);
+    if (data.token) {
+      localStorage.setItem('token', data.token);
       return data;
     } else {
       return;
     }
 
   })
+}
+
+export const getContent = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then((res) => res.json())
 }
