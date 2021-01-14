@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import Form from './Form';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import Input from './Input';
-// import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Register({isLoading}) {
+function Register({onRegisterFormSubmit, isLoading}) {
   const { values, handleChange, errors, isValid } = useFormAndValidation();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onRegisterFormSubmit(values.password, values.email);
+  }
 
   return (
     <section className="authentication">
@@ -17,6 +21,7 @@ function Register({isLoading}) {
         isDisabled={!isValid}
         formClasses={'authentication__form form_auth'}
         isAuth={true}
+        onSubmit={handleSubmit}
       >
         <Input
           type="email"

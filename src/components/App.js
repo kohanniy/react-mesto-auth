@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Register from './Register';
@@ -14,6 +14,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletionPopup from './ConfirmDeletionPopup';
 import ProtectedRoute from './ProtectedRoute';
+import * as auth from '../utils/auth';
 
 
 function App() {
@@ -26,11 +27,25 @@ function App() {
   const [ cards, setCards ] = React.useState([]);
   const [ isLoading, setIsLoading ] = React.useState(false);
   const [ loggedIn, setLoggedIn ] = React.useState(false);
+  const history = useHistory();
 
   function handleHeaderButtonClick() {
     setLoggedIn(!loggedIn);
   }
 
+  function handleRegisterFormSubmit(password, email) {
+    setIsLoading(!isLoading)
+    auth.register(password, email)
+      .then((res) => {
+        history.push('/signin');
+      })
+      .catch((err) => {
+        rejectPromise(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
 
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
@@ -55,6 +70,7 @@ function App() {
     setSelectedCard(false);
     setIsConfirmDeletionPopup(false);
   }
+
 
   function handleUpdateUser({name, about}) {
     setIsLoading(!isLoading);
@@ -179,7 +195,9 @@ function App() {
           onCardLike={handleCardLike}
         />
         <Route path='/signup'>
-          <Register />
+          <Register
+            onRegisterFormSubmit={handleRegisterFormSubmit}
+          />
         </Route>
         <Route path='/signin'>
           <Login />
