@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Form from './Form';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import Input from './Input';
+import { inputsData } from '../utils/constants';
 
 function Register({onRegisterFormSubmit, isLoading}) {
   const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
@@ -27,27 +28,23 @@ function Register({onRegisterFormSubmit, isLoading}) {
         isAuth={true}
         onSubmit={handleSubmit}
       >
-        <Input
-          type="email"
-          name="email"
-          placeholder="Email"
-          handleChange={handleChange}
-          values={values}
-          autoComplete="email"
-          errors={errors}
-          isAuth={true}
-        />
-        <Input
-          type="password"
-          name="password"
-          placeholder="Пароль"
-          handleChange={handleChange}
-          values={values}
-          errors={errors}
-          isAuth={true}
-          minLength="6" maxLength="200"
-          autoComplete = "new-password"
-        />
+        {
+          inputsData.authInputs.map((input, index) =>
+            <Input
+              key={index}
+              type={input.type}
+              name={input.name}
+              placeholder={input.placeholder}
+              isAuth={input.isAuth}
+              autoComplete={input.autoComplete}
+              minLength={input.minLength}
+              maxLength={input.maxLength}
+              handleChange={handleChange}
+              values={values}
+              errors={errors}
+            />
+          )
+        }
       </Form>
       <p className="authentication__text">
         Уже зарегистрированы?&nbsp;

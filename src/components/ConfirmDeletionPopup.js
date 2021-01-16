@@ -1,6 +1,5 @@
-import React from 'react';
-import PopupWithForm from './PopupWithForm';
-import ClosePopupButton from './ClosePopupButton';
+import Popup from './Popup';
+import Form from './Form';
 
 function ConfirmDeletionPopup({ isOpen, onClose, cardDelete, isLoading }) {
   function handleSubmit(e) {
@@ -9,15 +8,17 @@ function ConfirmDeletionPopup({ isOpen, onClose, cardDelete, isLoading }) {
   }
 
   return (
-    <PopupWithForm
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      name="confirm-deletion"
-      title="Вы уверены?"
-      buttonText={isLoading ? 'Удаление...' : 'Да'}
+    <Popup
+      data={isOpen}
+      onClose={onClose}
     >
-      <ClosePopupButton onClose={onClose} />
-    </PopupWithForm>
+      <Form
+        onSubmit={handleSubmit}
+        name="confirm-deletion"
+        title="Вы уверены?"
+        buttonText={isLoading ? 'Удаление...' : 'Да'}
+      />
+    </Popup>
   );
 }
 

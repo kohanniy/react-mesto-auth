@@ -1,8 +1,7 @@
 import React from 'react';
-import { handleStopPropagation } from '../utils/utils';
 
 function Form(props) {
-  const { onSubmit, name, title, children, isDisabled, buttonText, formClasses, isAuth } = props;
+  const { onSubmit, name, title, children, isDisabled, buttonText, isAuth } = props;
 
   let classNameButton = 'form__button';
   let classNameHeading = 'form__heading';
@@ -15,10 +14,9 @@ function Form(props) {
 
   return (
     <form
-      onClick={handleStopPropagation}
       onSubmit={onSubmit}
       name={name}
-      className={`form ${formClasses}`}
+      className="form"
       noValidate
     >
       <h3 className={classNameHeading}>{title}</h3>

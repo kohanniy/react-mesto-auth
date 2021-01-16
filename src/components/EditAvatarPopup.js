@@ -1,9 +1,10 @@
 import React from 'react';
-import PopupWithForm from './PopupWithForm';
+import Popup from './Popup';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import ClosePopupButton from './ClosePopupButton';
+import Form from './Form';
 import Input from './Input';
+import { inputsData } from '../utils/constants';
 
 function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm, setValues, setIsValid } = useFormAndValidation();
@@ -24,25 +25,33 @@ function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose, isLoading }) {
   }
 
   return (
-    <PopupWithForm
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      name="edit-avatar"
-      title="Обновить аватар"
-      buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
-      isDisabled={!isValid}
+    <Popup
+      data={isOpen}
+      onClose={onClose}
     >
-      <Input
-        name="avatar"
-        type="url"
-        errors={errors}
-        placeholder="Ссылка на аватар"
-        handleChange={handleChange}
-        values={values}
-        isAuth={false}
-      />
-      <ClosePopupButton onClose={onClose} />
-    </PopupWithForm>
+      <Form
+        onSubmit={handleSubmit}
+        name="edit-avatar"
+        title="Обновить аватар"
+        buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
+        isDisabled={!isValid}
+      >
+        {
+          inputsData.editAvatarInputs.map((input, index) =>
+            <Input
+              key={index}
+              type={input.type}
+              name={input.name}
+              placeholder={input.placeholder}
+              errors={errors}
+              handleChange={handleChange}
+              values={values}
+              isAuth={false}
+            />
+          )
+        }
+      </Form>
+    </Popup>
   );
 }
 

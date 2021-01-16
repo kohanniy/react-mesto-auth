@@ -1,9 +1,10 @@
 import React from 'react';
-import PopupWithForm from './PopupWithForm';
+import Popup from './Popup';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import ClosePopupButton from './ClosePopupButton';
 import Input from './Input';
+import Form from './Form';
+import { inputsData } from '../utils/constants';
 
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
@@ -23,36 +24,34 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   }
 
   return (
-    <PopupWithForm
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      name="edit-profile"
-      title="Редактировать профиль"
-      buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
-      isDisabled={!isValid}
+    <Popup
+      data={isOpen}
+      onClose={onClose}
     >
-      <Input
-        name="name"
-        type="text"
-        placeholder="Валентин Петров"
-        errors={errors}
-        values={values}
-        handleChange={handleChange}
-        minLength="2" maxLength="40"
-        isAuth={false}
-      />
-      <Input
-        name="about"
-        type="text"
-        placeholder="Род занятий. Например, программист"
-        errors={errors}
-        values={values}
-        handleChange={handleChange}
-        minLength="2" maxLength="200"
-        isAuth={false}
-      />
-      <ClosePopupButton onClose={onClose} />
-    </PopupWithForm>
+      <Form
+        onSubmit={handleSubmit}
+        name="edit-profile"
+        title="Редактировать профиль"
+        buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
+        isDisabled={!isValid}
+      >
+        {
+          inputsData.editProfileInputs.map((input, index) =>
+            <Input
+              key={index}
+              type={input.type}
+              name={input.name}
+              placeholder={input.placeholder}
+              minLength={input.minLength}
+              maxLength={input.maxLength}
+              errors={errors}
+              values={values}
+              handleChange={handleChange}
+            />
+          )
+        }
+      </Form>
+    </Popup>
   );
 }
 

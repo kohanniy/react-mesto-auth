@@ -1,8 +1,9 @@
 import React from 'react';
-import PopupWithForm from './PopupWithForm';
+import Popup from './Popup';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
-import ClosePopupButton from './ClosePopupButton';
+import Form from './Form';
 import Input from './Input';
+import { inputsData } from '../utils/constants';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
@@ -17,36 +18,34 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   }
 
   return (
-    <PopupWithForm
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      name="add-card"
-      title="Новое место"
-      buttonText={isLoading ? 'Сохранение...' : 'Создать'}
-      isDisabled={!isValid}
+    <Popup
+      data={isOpen}
+      onClose={onClose}
     >
-      <Input
-        name="name"
-        type="text"
-        placeholder="Название"
-        minLength="1"
-        maxLength="30"
-        errors={errors}
-        values={values}
-        handleChange={handleChange}
-        isAuth={false}
-      />
-      <Input
-        type="url"
-        name="link"
-        placeholder="Ссылка на картинку"
-        errors={errors}
-        values={values}
-        handleChange={handleChange}
-        isAuth={false}
-      />
-      <ClosePopupButton onClose={onClose} />
-    </PopupWithForm>
+      <Form
+        onSubmit={handleSubmit}
+        name="add-card"
+        title="Новое место"
+        buttonText={isLoading ? 'Сохранение...' : 'Создать'}
+        isDisabled={!isValid}
+      >
+        {
+          inputsData.addPlaceInputs.map((input, index) =>
+            <Input
+              key={index}
+              name={input.name}
+              type={input.type}
+              placeholder={input.placeholder}
+              minLength={input.minLength}
+              maxLength={input.maxLength}
+              errors={errors}
+              values={values}
+              handleChange={handleChange}
+            />
+          )
+        }
+      </Form>
+    </Popup>
   );
 }
 

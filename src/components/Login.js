@@ -2,6 +2,7 @@ import React from 'react';
 import Form from './Form';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import Input from './Input';
+import { inputsData } from "../utils/constants";
 
 function Login({onLoginFormSubmit, isLoading}) {
   const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
@@ -26,7 +27,24 @@ function Login({onLoginFormSubmit, isLoading}) {
         isAuth={true}
         onSubmit={handleSubmit}
       >
-        <Input
+        {
+          inputsData.authInputs.map((input, index) =>
+            <Input
+              key={index}
+              type={input.type}
+              name={input.name}
+              placeholder={input.placeholder}
+              isAuth={input.isAuth}
+              autoComplete={input.autoComplete}
+              minLength={input.minLength}
+              maxLength={input.maxLength}
+              handleChange={handleChange}
+              values={values}
+              errors={errors}
+            />
+          )
+        }
+        {/* <Input
           type="email"
           name="email"
           placeholder="Email"
@@ -46,7 +64,7 @@ function Login({onLoginFormSubmit, isLoading}) {
           isAuth={true}
           minLength="6" maxLength="200"
           autoComplete = "current-password"
-        />
+        /> */}
       </Form>
     </section>
   );
