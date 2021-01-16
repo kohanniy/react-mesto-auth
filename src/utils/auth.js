@@ -1,5 +1,13 @@
 export const BASE_URL = 'https://auth.nomoreparties.co';
 
+export const parseResponseFromServer = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+
+  return Promise.reject(res.status);
+}
+
 export const register = (password, email) => {
   return fetch (`${BASE_URL}/signup`, {
     method: 'POST',
@@ -27,16 +35,7 @@ export const authorize = (password, email) => {
     },
     body: JSON.stringify({ password, email })
   })
-  .then((res) => res.json())
-  .then((data) => {
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-      return data;
-    } else {
-      return;
-    }
-
-  })
+  .then(parseResponseFromServer)
 }
 
 export const getContent = (token) => {

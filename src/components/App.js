@@ -28,6 +28,7 @@ function App() {
   const [ isLoading, setIsLoading ] = React.useState(false);
   const [ loggedIn, setLoggedIn ] = React.useState(false);
   const [ userEmail, setUserEmail ] = React.useState('');
+  const [ menuOpened, setMenuOpened ] = React.useState(false);
   const history = useHistory();
 
   function handleRegisterFormSubmit(password, email) {
@@ -45,19 +46,28 @@ function App() {
   }
 
   function handleLoginFormSubmit(password, email) {
-    setIsLoading(!isLoading);
+    setIsLoading(true);
     auth.authorize(password, email)
       .then((data) => {
-        setLoggedIn(true);
-        setUserEmail(email);
-        history.push('/');
+        if (data) {
+          localStorage.setItem('token', data.token);
+          setLoggedIn(true);
+          setUserEmail(email);
+          history.push('/');
+        }
       })
       .catch((err) => {
-        rejectPromise(err);
+        if (err === 401) {
+          console.log(err);
+        }
       })
       .finally(() => {
         setIsLoading(false);
       })
+  }
+
+  function handleMenuToggleClick() {
+    setMenuOpened(!menuOpened);
   }
 
   function handleSignOut() {
@@ -220,6 +230,8 @@ function App() {
         signOut={handleSignOut}
         loggedIn={loggedIn}
         userEmail={userEmail}
+        menuToggleClick={handleMenuToggleClick}
+        menuOpened={menuOpened}
       />
       <main className="main-content">
         <ProtectedRoute
@@ -237,11 +249,13 @@ function App() {
         <Route path='/signup'>
           <Register
             onRegisterFormSubmit={handleRegisterFormSubmit}
+            isLoading={isLoading}
           />
         </Route>
         <Route path='/signin'>
           <Login
             onLoginFormSubmit={handleLoginFormSubmit}
+            isLoading={isLoading}
           />
         </Route>
         <Route path="/">

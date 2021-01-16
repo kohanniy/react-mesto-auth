@@ -1,13 +1,15 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Form from './Form';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import Input from './Input';
 
 function Register({onRegisterFormSubmit, isLoading}) {
-  const { values, handleChange, errors, isValid } = useFormAndValidation();
-  const params = useParams();
-  console.log(params);
+  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
+
+  React.useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
   function handleSubmit(e) {
     e.preventDefault();

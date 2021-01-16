@@ -1,11 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Form from './Form';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 import Input from './Input';
 
 function Login({onLoginFormSubmit, isLoading}) {
-  const { values, handleChange, errors, isValid } = useFormAndValidation();
+  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
+
+  React.useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -42,13 +45,9 @@ function Login({onLoginFormSubmit, isLoading}) {
           errors={errors}
           isAuth={true}
           minLength="6" maxLength="200"
-          autoComplete = "password"
+          autoComplete = "current-password"
         />
       </Form>
-      <p className="authentication__text">
-        Еще не зарегистрированы?&nbsp;
-        <Link className="authentication__link" to="signup">Зарегистрироваться</Link>
-      </p>
     </section>
   );
 }

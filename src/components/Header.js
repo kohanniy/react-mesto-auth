@@ -1,21 +1,32 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
-import logo from '../images/logo.svg';
+import HeaderContainer from './HeaderContainer';
+import HeaderControls from './HeaderControls';
 
-function Header({signOut, loggedIn, userEmail }) {
+
+function Header({signOut, loggedIn, userEmail, menuToggleClick, menuOpened }) {
   const location = useLocation();
-  console.log(location);
+  let classNameHeader = 'header'
+
+  if (menuOpened) {
+    classNameHeader += ' menu-opened';
+  }
+
   return (
-    <header className="header">
-      <img src={logo} alt="Логотип" className="header__logo" />
+    <header className={classNameHeader}>
+      <HeaderContainer
+        menuToggleClick={menuToggleClick}
+        loggedIn={loggedIn}
+      />
       {
         loggedIn
-          ? <>
-              <p>{userEmail}</p>
-              <button onClick={signOut} type="button">Выйти</button>
-            </>
-          : location.pathname === '/signin' ? <Link to="/signup">Регистрация</Link> : <Link to="/signin">Войти</Link>
+          ? <HeaderControls
+              signOut={signOut}
+              userEmail={userEmail}
+            />
+          : location.pathname === '/signin'
+              ? <Link className="header__link" to="/signup">Регистрация</Link>
+              : <Link className="header__link" to="/signin">Войти</Link>
       }
 
     </header>
