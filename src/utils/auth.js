@@ -4,7 +4,6 @@ export const parseResponseFromServer = (res) => {
   if (res.ok) {
     return res.json();
   }
-
   return Promise.reject(res.status);
 }
 
@@ -17,13 +16,7 @@ export const register = (password, email) => {
     },
     body: JSON.stringify({password, email})
   })
-    .then((res) => {
-      try {
-        return res.json();
-      } catch (err) {
-        return err;
-      }
-    })
+  .then(parseResponseFromServer)
 };
 
 export const authorize = (password, email) => {
@@ -47,5 +40,5 @@ export const getContent = (token) => {
       'Authorization': `Bearer ${token}`
     }
   })
-  .then((res) => res.json())
+  .then(parseResponseFromServer)
 }

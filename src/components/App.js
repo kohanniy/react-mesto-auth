@@ -14,6 +14,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletionPopup from './ConfirmDeletionPopup';
 import ProtectedRoute from './ProtectedRoute';
+import InfoTooltip from './InfoTooltip';
 import * as auth from '../utils/auth';
 
 
@@ -23,6 +24,8 @@ function App() {
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
   const [ isConfirmDeletionPopup, setIsConfirmDeletionPopup ] = React.useState(false);
   const [ isImagePopupOpen, setIsImagePopupOpen ] = React.useState(false);
+  const [ isInfoTooltipOpen, setInfoTooltipOpen ] = React.useState(false);
+  const [ resultRegistration, setResultRegistration ] = React.useState({});
   const [ selectedCard, setSelectedCard ] = React.useState(false);
   const [ currentUser, setCurrentUser ] = React.useState('');
   const [ cards, setCards ] = React.useState([]);
@@ -36,10 +39,17 @@ function App() {
     setIsLoading(!isLoading);
     auth.register(password, email)
       .then((data) => {
+        setInfoTooltipOpen(true);
+        setResultRegistration({...resultRegistration, message: 'Вы успешно зарегистрировались! Войдите в систему.', success: true});
         history.push('/signin');
       })
       .catch((err) => {
-        rejectPromise(err);
+        if (err === 400) {
+          setResultRegistration({...resultRegistration, message: 'Пользователь с таким email уже зарегистрирован.', success: false});
+        } else {
+          setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+        }
+        setInfoTooltipOpen(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -59,8 +69,11 @@ function App() {
       })
       .catch((err) => {
         if (err === 401) {
-          console.log(err);
+          setResultRegistration({...resultRegistration, message: 'Вы ввели неверный email или пароль! Попробуйте еще раз', success: false});
+        } else {
+          setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
         }
+        setInfoTooltipOpen(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -99,8 +112,8 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddCardPopupOpen(false);
     setIsImagePopupOpen(false);
-
     setIsConfirmDeletionPopup(false);
+    setInfoTooltipOpen(false);
   }, [])
 
   function handleUpdateUser({name, about}) {
@@ -206,10 +219,11 @@ function App() {
           }
         })
         .catch((err) => {
-          rejectPromise(err);
+          setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+          setInfoTooltipOpen(true);
         })
       }
-  }, [history]);
+  }, [history, resultRegistration]);
 
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {
@@ -298,6 +312,14 @@ function App() {
             isOpen={isImagePopupOpen}
           />
         </>
+      }
+      {
+        isInfoTooltipOpen &&
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          result={resultRegistration}
+        />
       }
     </CurrentUserContext.Provider>
   );

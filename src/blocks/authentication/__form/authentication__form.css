@@ -1,11 +1,12 @@
 .authentication__form {
   max-width: 430px;
   width: 100%;
-  position: relative;
+  padding: 34px 36px 36px;
 }
 
-/* @media (max-width: 492px) {
+@media (max-width: 575px) {
   .authentication__form {
-    width: 75%;
+    width: 88%;
+    padding: 31px 20px 30px;
   }
-} */
+}
