@@ -44,27 +44,6 @@ function Login({onLoginFormSubmit, isLoading}) {
             />
           )
         }
-        {/* <Input
-          type="email"
-          name="email"
-          placeholder="Email"
-          handleChange={handleChange}
-          values={values}
-          autoComplete="email"
-          errors={errors}
-          isAuth={true}
-        />
-        <Input
-          type="password"
-          name="password"
-          placeholder="Пароль"
-          handleChange={handleChange}
-          values={values}
-          errors={errors}
-          isAuth={true}
-          minLength="6" maxLength="200"
-          autoComplete = "current-password"
-        /> */}
       </Form>
     </section>
   );
