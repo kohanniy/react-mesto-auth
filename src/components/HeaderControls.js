@@ -1,5 +1,3 @@
-import React from 'react';
-
 function HeaderControls({ userEmail, signOut }) {
   return (
     <div className="header__controls">

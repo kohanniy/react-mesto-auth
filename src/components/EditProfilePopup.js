@@ -25,7 +25,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
 
   return (
     <Popup
-      data={isOpen}
+      isOpen={isOpen}
       onClose={onClose}
     >
       <Form

@@ -26,7 +26,7 @@ function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose, isLoading }) {
 
   return (
     <Popup
-      data={isOpen}
+      isOpen={isOpen}
       onClose={onClose}
     >
       <Form

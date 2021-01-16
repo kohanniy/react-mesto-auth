@@ -19,7 +19,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
 
   return (
     <Popup
-      data={isOpen}
+      isOpen={isOpen}
       onClose={onClose}
     >
       <Form

@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Form(props) {
   const { onSubmit, name, title, children, isDisabled, buttonText, isAuth } = props;
 

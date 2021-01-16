@@ -22,6 +22,7 @@ function App() {
   const [ isAddCardPopupOpen, setIsAddCardPopupOpen ] = React.useState(false);
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
   const [ isConfirmDeletionPopup, setIsConfirmDeletionPopup ] = React.useState(false);
+  const [ isImagePopupOpen, setIsImagePopupOpen ] = React.useState(false);
   const [ selectedCard, setSelectedCard ] = React.useState(false);
   const [ currentUser, setCurrentUser ] = React.useState('');
   const [ cards, setCards ] = React.useState([]);
@@ -78,6 +79,7 @@ function App() {
 
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
+    setIsImagePopupOpen(!isImagePopupOpen);
   }
 
   function handleEditAvatarClick() {
@@ -92,14 +94,14 @@ function App() {
     setIsAddCardPopupOpen(!isAddCardPopupOpen);
   }
 
-  function closeAllPopups() {
+  const closeAllPopups = React.useCallback(() => {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddCardPopupOpen(false);
-    setSelectedCard(false);
-    setIsConfirmDeletionPopup(false);
-  }
+    setIsImagePopupOpen(false);
 
+    setIsConfirmDeletionPopup(false);
+  }, [])
 
   function handleUpdateUser({name, about}) {
     setIsLoading(!isLoading);
@@ -189,7 +191,7 @@ function App() {
     document.addEventListener('keydown', handlePopupsEscClose);
 
     return () => document.removeEventListener('keydown', handlePopupsEscClose);
-  }, []);
+  }, [closeAllPopups]);
 
   //Проверка токена
   React.useEffect(() => {
@@ -293,6 +295,7 @@ function App() {
           <ImagePopup
             card={selectedCard}
             onClose={closeAllPopups}
+            isOpen={isImagePopupOpen}
           />
         </>
       }

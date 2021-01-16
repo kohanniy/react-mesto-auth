@@ -1,4 +1,3 @@
-import React from 'react';
 import Profile from './Profile';
 import Cards from './Cards';
 

@@ -9,7 +9,7 @@ function ConfirmDeletionPopup({ isOpen, onClose, cardDelete, isLoading }) {
 
   return (
     <Popup
-      data={isOpen}
+      isOpen={isOpen}
       onClose={onClose}
     >
       <Form
