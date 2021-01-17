@@ -6,15 +6,19 @@ function Cards(props) {
   return (
     <section className="cards">
       <ul className="cards__list">
-        {cards.map(card =>
-          <Card
-            onConfirmDeletionPopupOpen={onConfirmDeletionPopupOpen}
-            onCardLike={onCardLike}
-            onCardClick={onCardClick}
-            key={card._id.toString()}
-            cardData={card}
-          />
-        )}
+        {
+          cards.map(card =>
+            (
+              <Card
+                onConfirmDeletionPopupOpen={onConfirmDeletionPopupOpen}
+                onCardLike={onCardLike}
+                onCardClick={onCardClick}
+                key={card._id.toString()}
+                cardData={card}
+              />
+            )
+          )
+        }
       </ul>
     </section>
   );

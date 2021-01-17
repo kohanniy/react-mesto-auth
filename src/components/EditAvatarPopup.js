@@ -38,16 +38,18 @@ function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose, isLoading }) {
       >
         {
           inputsData.editAvatarInputs.map((input, index) =>
-            <Input
-              key={index}
-              type={input.type}
-              name={input.name}
-              placeholder={input.placeholder}
-              errors={errors}
-              handleChange={handleChange}
-              values={values}
-              isAuth={false}
-            />
+            (
+              <Input
+                key={index}
+                type={input.type}
+                name={input.name}
+                placeholder={input.placeholder}
+                errors={errors}
+                handleChange={handleChange}
+                values={values}
+                isAuth={false}
+              />
+            )
           )
         }
       </Form>

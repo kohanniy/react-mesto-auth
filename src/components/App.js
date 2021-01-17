@@ -229,8 +229,7 @@ function App() {
   React.useEffect(() => {
     if (loggedIn) {
       api.getDataForRendered()
-      .then((data) => {
-        const [ cardsData, userData ] = data;
+      .then(([ cardsData, userData ]) => {
         setCards(cardsData);
         setCurrentUser(userData);
       })

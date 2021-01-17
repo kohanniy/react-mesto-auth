@@ -37,17 +37,19 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
       >
         {
           inputsData.editProfileInputs.map((input, index) =>
-            <Input
-              key={index}
-              type={input.type}
-              name={input.name}
-              placeholder={input.placeholder}
-              minLength={input.minLength}
-              maxLength={input.maxLength}
-              errors={errors}
-              values={values}
-              handleChange={handleChange}
-            />
+            (
+              <Input
+                key={index}
+                type={input.type}
+                name={input.name}
+                placeholder={input.placeholder}
+                minLength={input.minLength}
+                maxLength={input.maxLength}
+                errors={errors}
+                values={values}
+                handleChange={handleChange}
+              />
+            )
           )
         }
       </Form>

@@ -31,17 +31,19 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
       >
         {
           inputsData.addPlaceInputs.map((input, index) =>
-            <Input
-              key={index}
-              name={input.name}
-              type={input.type}
-              placeholder={input.placeholder}
-              minLength={input.minLength}
-              maxLength={input.maxLength}
-              errors={errors}
-              values={values}
-              handleChange={handleChange}
-            />
+            (
+              <Input
+                key={index}
+                name={input.name}
+                type={input.type}
+                placeholder={input.placeholder}
+                minLength={input.minLength}
+                maxLength={input.maxLength}
+                errors={errors}
+                values={values}
+                handleChange={handleChange}
+              />
+            )
           )
         }
       </Form>

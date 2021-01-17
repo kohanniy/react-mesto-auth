@@ -30,19 +30,21 @@ function Register({onRegisterFormSubmit, isLoading}) {
       >
         {
           inputsData.authInputs.map((input, index) =>
-            <Input
-              key={index}
-              type={input.type}
-              name={input.name}
-              placeholder={input.placeholder}
-              isAuth={input.isAuth}
-              autoComplete={input.autoComplete}
-              minLength={input.minLength}
-              maxLength={input.maxLength}
-              handleChange={handleChange}
-              values={values}
-              errors={errors}
-            />
+            (
+              <Input
+                key={index}
+                type={input.type}
+                name={input.name}
+                placeholder={input.placeholder}
+                isAuth={input.isAuth}
+                autoComplete={input.autoComplete}
+                minLength={input.minLength}
+                maxLength={input.maxLength}
+                handleChange={handleChange}
+                values={values}
+                errors={errors}
+              />
+            )
           )
         }
       </Form>

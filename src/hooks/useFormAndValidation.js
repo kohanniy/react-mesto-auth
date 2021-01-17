@@ -3,7 +3,7 @@ import React from 'react';
 export function useFormAndValidation() {
   const [ values, setValues ] = React.useState({});
   const [ errors, setErrors ] = React.useState({});
-  const [ isValid, setIsValid ] = React.useState({});
+  const [ isValid, setIsValid ] = React.useState(false);
 
   const handleChange = (e) => {
     const name = e.target.name;
