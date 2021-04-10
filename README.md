@@ -14,3 +14,4 @@
 * JSX-разметка
 * Функциональные компоненты
 * CSS
+[Посмотреть проект](https://infallible-agnesi-ade491.netlify.app/)
