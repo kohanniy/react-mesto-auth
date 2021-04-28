@@ -6,7 +6,7 @@ import Register from './Register';
 import Login from './Login';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import {rejectPromise} from '../utils/utils';
+import { rejectPromise, setToken, getToken, removeToken } from '../utils/utils';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
@@ -15,8 +15,6 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletionPopup from './ConfirmDeletionPopup';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
-import * as auth from '../utils/auth';
-
 
 function App() {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false);
@@ -37,7 +35,7 @@ function App() {
 
   function handleRegisterFormSubmit(password, email) {
     setIsLoading(!isLoading);
-    auth.register(password, email)
+    api.register(password, email)
       .then((data) => {
         setInfoTooltipOpen(true);
         setResultRegistration({...resultRegistration, message: 'Вы успешно зарегистрировались! Войдите в систему.', success: true});
@@ -58,10 +56,10 @@ function App() {
 
   function handleLoginFormSubmit(password, email) {
     setIsLoading(true);
-    auth.authorize(password, email)
+    api.authorize(password, email)
       .then((data) => {
         if (data) {
-          localStorage.setItem('token', data.token);
+          setToken(data.token);
           setLoggedIn(true);
           setUserEmail(email);
           history.push('/');
@@ -85,7 +83,7 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem('token');
+    removeToken();
     history.push('/signin');
     setLoggedIn(false);
   }
@@ -117,8 +115,9 @@ function App() {
   }, [])
 
   function handleUpdateUser({name, about}) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.setUserInfo({name, about})
+    api.setUserInfo({name, about}, token)
       .then((newUserData) => {
         setCurrentUser(newUserData);
         closeAllPopups();
@@ -132,8 +131,9 @@ function App() {
   }
 
   function handleUpdateAvatar({ avatar }) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.setAvatar({avatar})
+    api.setAvatar({avatar}, token)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -147,8 +147,9 @@ function App() {
   }
 
   function handleCardLike(card) {
+    const token = getToken();
     const isLiked = card.likes.some(like => like._id === currentUser._id);
-    api.changeLikeCardStatus(card._id, !isLiked)
+    api.changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
         setCards(newCards);
@@ -163,8 +164,9 @@ function App() {
   }
 
   function handleCardDelete(card) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.deleteCard(card._id)
+    api.deleteCard(card._id, token)
       .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
@@ -179,8 +181,9 @@ function App() {
   }
 
   function handleAddPlaceSubmit({name, link}) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.addCard({name, link})
+    api.addCard({name, link}, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -208,9 +211,9 @@ function App() {
 
   //Проверка токена
   React.useEffect(() => {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      auth.getContent(token)
+    if (getToken()) {
+      const token = getToken();
+      api.getContent(token)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
@@ -228,7 +231,8 @@ function App() {
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {
     if (loggedIn) {
-      api.getDataForRendered()
+      const token = getToken();
+      api.getDataForRendered(token)
       .then(([ cardsData, userData ]) => {
         setCards(cardsData);
         setCurrentUser(userData);

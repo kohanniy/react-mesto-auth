@@ -1,8 +1,6 @@
 class Api {
-  constructor({ url, token, groupId }) {
+  constructor({ url }) {
     this._url = url;
-    this._token = token;
-    this._groupId = groupId;
   }
 
   _parseResponseFromServer(res) {
@@ -13,35 +11,35 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getInitialCards() {
-    return fetch(`${this._url}/${this._groupId}/cards`, {
+  getInitialCards(token) {
+    return fetch(`${this._url}/cards`, {
       method: 'GET',
       headers: {
-        authorization: this._token
+        authorization: token
       }
     })
     .then(this._parseResponseFromServer)
   }
 
-  getUserInfo() {
-    return fetch(`${this._url}/${this._groupId}/users/me`, {
+  getUserInfo(token) {
+    return fetch(`${this._url}/users/me`, {
       method: 'GET',
       headers: {
-        authorization: this._token
+        authorization: token
       }
     })
     .then(this._parseResponseFromServer)
   }
 
-  getDataForRendered() {
-    return Promise.all([ this.getInitialCards(), this.getUserInfo() ])
+  getDataForRendered(token) {
+    return Promise.all([ this.getInitialCards(token), this.getUserInfo(token) ])
   }
 
-  addCard(data) {
-    return fetch(`${this._url}/${this._groupId}/cards`, {
+  addCard(data, token) {
+    return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: {
-        authorization: this._token,
+        authorization: token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -49,11 +47,11 @@ class Api {
     .then(this._parseResponseFromServer)
   }
 
-  setUserInfo(data) {
-    return fetch(`${this._url}/${this._groupId}/users/me`, {
+  setUserInfo(data, token) {
+    return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
+        authorization: token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -61,11 +59,11 @@ class Api {
     .then(this._parseResponseFromServer)
   }
 
-  setAvatar(data) {
-    return fetch(`${this._url}/${this._groupId}/users/me/avatar`, {
+  setAvatar(data, token) {
+    return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
+        authorization: token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -73,22 +71,58 @@ class Api {
     .then(this._parseResponseFromServer)
   }
 
-  deleteCard(id) {
-    return fetch(`${this._url}/${this._groupId}/cards/${id}`, {
+  deleteCard(id, token) {
+    return fetch(`${this._url}/cards/${id}`, {
       method: 'DELETE',
       headers: {
-        authorization: this._token
+        authorization: token
       }
     })
     .then(this._parseResponseFromServer)
   }
 
-  changeLikeCardStatus(id, like) {
-    return fetch(`${this._url}/${this._groupId}/cards/likes/${id}`, {
+  changeLikeCardStatus(id, like, token) {
+    return fetch(`${this._url}/cards/likes/${id}`, {
       method: like ? 'PUT' : 'DELETE',
       headers: {
-        authorization: this._token,
+        authorization: token,
         'Content-Type': 'application/json'
+      }
+    })
+    .then(this._parseResponseFromServer)
+  }
+
+  register(password, email) {
+    return fetch (`${this._url}/signup`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({password, email})
+    })
+    .then(this._parseResponseFromServer)
+  };
+
+  authorize(password, email) {
+    return fetch(`${this._url}/signin`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ password, email })
+    })
+    .then(this._parseResponseFromServer)
+  }
+
+  getContent(token) {
+    return fetch(`${this._url}/users/me`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     })
     .then(this._parseResponseFromServer)
@@ -96,9 +130,7 @@ class Api {
 }
 
 const api = new Api({
-  url: `https://mesto.nomoreparties.co/v1`,
-  token: `1282f84b-7da3-48cb-b9e7-a66ba2d4bc54`,
-  groupId: `cohort-16`
+  url: `http://api.mesto.kohanniy.nomoredomains.club`,
 });
 
 export default api;
