@@ -25,7 +25,7 @@ function App() {
   const [ isInfoTooltipOpen, setInfoTooltipOpen ] = React.useState(false);
   const [ resultRegistration, setResultRegistration ] = React.useState({});
   const [ selectedCard, setSelectedCard ] = React.useState(false);
-  const [ currentUser, setCurrentUser ] = React.useState('');
+  const [ currentUser, setCurrentUser ] = React.useState({});
   const [ cards, setCards ] = React.useState([]);
   const [ isLoading, setIsLoading ] = React.useState(false);
   const [ loggedIn, setLoggedIn ] = React.useState(false);
@@ -42,7 +42,9 @@ function App() {
         history.push('/signin');
       })
       .catch((err) => {
-        if (err === 400) {
+        if (err.status === 400) {
+          setResultRegistration({...resultRegistration, message: 'Неправильно заполнено одно из полей.', success: false});
+        } else if (err.status === 409) {
           setResultRegistration({...resultRegistration, message: 'Пользователь с таким email уже зарегистрирован.', success: false});
         } else {
           setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
@@ -66,8 +68,10 @@ function App() {
         }
       })
       .catch((err) => {
-        if (err === 401) {
+        if (err.status === 401) {
           setResultRegistration({...resultRegistration, message: 'Вы ввели неверный email или пароль! Попробуйте еще раз', success: false});
+        } else if (err.status === 400) {
+            setResultRegistration({...resultRegistration, message: 'Не передано одно из полей', success: false});
         } else {
           setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
         }
@@ -148,7 +152,7 @@ function App() {
 
   function handleCardLike(card) {
     const token = getToken();
-    const isLiked = card.likes.some(like => like._id === currentUser._id);
+    const isLiked = card.likes.some(like => like === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
@@ -211,18 +215,22 @@ function App() {
 
   //Проверка токена
   React.useEffect(() => {
-    if (getToken()) {
-      const token = getToken();
+    const token = getToken();
+    if (token) {
       api.getContent(token)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setUserEmail(res.data.email);
+            setUserEmail(res.email);
             history.push('/');
           }
         })
         .catch((err) => {
-          setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+          if (err.status === 401) {
+            setResultRegistration({...resultRegistration, message: 'Токен не передан или передан не в том формате', success: false});
+          } else {
+            setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+          }
           setInfoTooltipOpen(true);
         })
       }

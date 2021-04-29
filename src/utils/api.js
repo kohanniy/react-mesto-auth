@@ -8,14 +8,14 @@ class Api {
       return res.json();
     }
 
-    return Promise.reject(`Ошибка: ${res.status}`);
+    return Promise.reject(res);
   }
 
   getInitialCards(token) {
     return fetch(`${this._url}/cards`, {
       method: 'GET',
       headers: {
-        authorization: token
+        authorization: `Bearer ${token}`
       }
     })
     .then(this._parseResponseFromServer)
@@ -25,7 +25,7 @@ class Api {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
       headers: {
-        authorization: token
+        authorization: `Bearer ${token}`
       }
     })
     .then(this._parseResponseFromServer)
@@ -39,7 +39,7 @@ class Api {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -51,7 +51,7 @@ class Api {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -63,7 +63,7 @@ class Api {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
@@ -75,17 +75,17 @@ class Api {
     return fetch(`${this._url}/cards/${id}`, {
       method: 'DELETE',
       headers: {
-        authorization: token
+        authorization: `Bearer ${token}`
       }
     })
     .then(this._parseResponseFromServer)
   }
 
   changeLikeCardStatus(id, like, token) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+    return fetch(`${this._url}/cards/${id}/likes`, {
       method: like ? 'PUT' : 'DELETE',
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     })
@@ -122,7 +122,7 @@ class Api {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        authorization: `Bearer ${token}`
       }
     })
     .then(this._parseResponseFromServer)
@@ -130,7 +130,7 @@ class Api {
 }
 
 const api = new Api({
-  url: `http://api.mesto.kohanniy.nomoredomains.club`,
+  url: `https://api.mesto.kohanniy.nomoredomains.club`,
 });
 
 export default api;
