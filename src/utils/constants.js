@@ -50,7 +50,7 @@ export const inputsData = {
       placeholder: 'Пароль',
       isAuth: true,
       autoComplete: 'off',
-      minLength: '6',
+      minLength: '8',
       maxLength: '200'
     },
   ]
