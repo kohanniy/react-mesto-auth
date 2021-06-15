@@ -15,4 +15,4 @@
 * Функциональные компоненты
 * CSS
 
-[Посмотреть проект](https://infallible-agnesi-ade491.netlify.app/)
+[Посмотреть проект](https://mesto.kohanniy.nomoredomains.club)
